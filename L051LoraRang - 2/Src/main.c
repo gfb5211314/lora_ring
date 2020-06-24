@@ -21,9 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "usart.h"
 #include "rtc.h"
 #include "spi.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -35,7 +35,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+uint32_t  tim_count=0; 
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -61,7 +61,7 @@ static void MX_NVIC_Init(void);
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		
  // 	__HAL_RCC_GPIOA_CLK_DISABLE();
-	     MX_RTC_Init();
+//	     MX_RTC_Init();
 			  MX_NVIC_Init();
 
 }	
@@ -77,7 +77,7 @@ extern uint8_t sleep_flag;
 void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-
+//
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -91,6 +91,21 @@ void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+extern uint8_t sleep_flag;
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
+/* USER CODE BEGIN PFP */
+extern uint8_t password_key;
+uint8_t password_key_value=0;
+extern  uint8_t runing_state_flag;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -202,15 +217,11 @@ void stop_mode_config(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;
+
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-//    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
-//    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-//    GPIO_InitStruct.Pull = GPIO_NOPULL;
-//    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
 
 
@@ -221,13 +232,6 @@ void stop_mode_config(void)
   HAL_GPIO_Init(speak_busy_GPIO_Port, &GPIO_InitStruct);
 	
 
-//  GPIO_InitStruct.Pin = GPIO_PIN_All;
-//  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-//  GPIO_InitStruct.Pull = GPIO_NOPULL;
-//  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);	   
-//	HAL_GPIO_Init(GPIOB ,&GPIO_InitStruct);	 
-//	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);	 
-//  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);	 
 				
   __HAL_RCC_GPIOA_CLK_DISABLE();
   __HAL_RCC_GPIOB_CLK_DISABLE();
@@ -262,7 +266,7 @@ void sleep_init()
     /* USER CODE BEGIN SysInit */
 //	   HAL_UART_DeInit(&huart1);
 //	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_All);
-//	HAL_GPIO_DeInit(GPIOB, GPIO_PIN_All);
+
 //	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_All);
 //  HAL_GPIO_DeInit(GPIOH, GPIO_PIN_All);
  
@@ -276,23 +280,26 @@ void sleep_init()
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-      HAL_UART_DeInit(&hlpuart1);
+      HAL_UART_DeInit(&huart1);
 //	     HAL_ADC_DeInit(&hadc);
 	     HAL_SPI_DeInit(&hspi1);
+		HAL_GPIO_DeInit(GPIOB, GPIO_PIN_15);
   /* USER CODE END SysInit */
-
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+  MX_GPIO_Init();	
   MX_ADC_Init();
-  MX_LPUART1_UART_Init();
+  MX_USART1_UART_Init();
   MX_SPI1_Init();
-  MX_RTC_Init();
+//  MX_RTC_Init();
 
 //  /* Initialize interrupts */
    MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 	app_lora_config_init();
 }
+/* USER CODE END 0 */
+
+
 /* USER CODE END 0 */
 
 
@@ -327,9 +334,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC_Init();
-  MX_LPUART1_UART_Init();
+  MX_USART1_UART_Init();
   MX_SPI1_Init();
-  MX_RTC_Init();
+//  MX_RTC_Init();
 
 //  /* Initialize interrupts */
   MX_NVIC_Init();
@@ -354,8 +361,8 @@ int main(void)
 		check_rung_state();
 		
     /* USER CODE END WHILE */
-    /* USER CODE BEGIN 3 */
 
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -399,8 +406,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPUART1|RCC_PERIPHCLK_RTC;
-  PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_PCLK1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_RTC;
+  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
   PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -445,8 +452,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM2) {
     HAL_IncTick();
   }
+	   
+//printf("password_key=%d",password_key);
+//	printf("runing_state_flag=%d",runing_state_flag);
   /* USER CODE BEGIN Callback 1 */
-
+	if((password_key==1)&&(sleep_flag==1))
+	{
+	    tim_count++;
+	    if(tim_count>300000)
+			{
+				password_key=0;
+				tim_count=0;
+				sleep_open();
+		  }
+		}
+	else
+	{
+		password_key=0;
+		tim_count=0;
+		
+	}
   /* USER CODE END Callback 1 */
 }
 

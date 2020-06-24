@@ -21,6 +21,8 @@ uint8_t key_state_value=0;
 	  extern uint8_t  rang_key_flag;
 		  extern uint8_t  fangchai_flag;
 			  extern uint8_t  sleep_flag;
+  extern		uint8_t password_key;  //按键检查标志
+	extern uint8_t password_key_value;
 				uint8_t xingling_flag=0;
 //HAL接口层函数
 //获得key1键值
@@ -73,16 +75,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
    
       HAL_Delay(10);/* 延时一小段时间，消除抖动 */
-	if(scan_key_flag==1)
+	if((scan_key_flag==1)||(runing_state_flag==1))
 	{
      if(GPIO_Pin==key1_Pin)
     {
-	
+	   
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(key1_GPIO_Port,key1_Pin)==0)
     {
-			 
-	  
+//			    printf("1");
+	        password_key=1;
           key_state_value=1;
 	
 		  
@@ -94,9 +96,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(key2_GPIO_Port,key2_Pin)==0)
     {
- 
+//			   printf("2");
+          password_key=1;
           key_state_value=2;
-		
+	
     }
     __HAL_GPIO_EXTI_CLEAR_IT(key2_Pin);
   }
@@ -105,13 +108,29 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(key3_GPIO_Port,key3_Pin)==0)
     {
-       
+//						   printf("3");
+        password_key=1;
           key_state_value=3;
 	
-			 
+
     }
     __HAL_GPIO_EXTI_CLEAR_IT(key3_Pin);
   }
+    if((password_key==1)&&(runing_state_flag==1))
+			{
+				        password_key_value =check_key_password();
+           if(password_key_value!=0)
+					 {			
+        
+//				printf("password_key_value=%d\r\n",password_key_value);					 
+						   password_key=0;
+					 }
+					 else
+					 {
+						 key_state_value=0;
+					 }
+			}
+
   }
 		 if(GPIO_Pin==rang_key_Pin)
   {
@@ -120,6 +139,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {    		
 			if(runing_state_flag==1)
 			{
+	
          rang_key_flag=1;
 				  printf("156");
 			}
@@ -137,6 +157,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {
            	if(runing_state_flag==1)
 			{
+
             fangchai_flag=1;
 				   
 			}
@@ -150,8 +171,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
 	 if((sleep_flag==1)&&(runing_state_flag==1))
 		{
-			  sleep_init();
-			printf("醒来\r\n");
+			      sleep_init();
+//			printf("醒来\r\n");
 		}
 
 }

@@ -25,7 +25,7 @@ uint8_t TXbuffer[50] = {0};
 uint8_t RXbuffer[50] = {0};
 uint16_t T_Cnt = 0;
 uint8_t factory_parameter_flag=0;    //出厂是否设置
-uint8_t user_password[10]={0};        //用户密码
+uint8_t user_password[10]={1,2,3,1,2,3};        //用户密码
 uint8_t user_temp_password[10]={0};        //用户密码
 uint8_t xiaojing_password[10]={1,2,3,2,2,2};    //消警密码
 uint8_t dev_num[2]={0};     //设备号
@@ -33,7 +33,9 @@ uint8_t dev_runing_flag=0;  //设备状态
 uint8_t pack_len = 0;
 uint8_t lora_data_state=0;
 uint8_t scan_key_flag=0;
+uint8_t password_key=0;  //按键检查标志
 uint8_t sleep_flag=0;
+extern uint8_t password_key_value;
 void set_txrx_datalen(uint8_t datalen);
 void sleep_open(void);
 extern uint8_t key_state_value;
@@ -41,6 +43,7 @@ extern uint8_t key_state_value;
 	 uint8_t  rang_key_flag=0;
 		uint8_t  fangchai_flag=0;
 uint8_t pin_pack(uint8_t *dev,uint8_t dev_type,uint8_t function_num,uint8_t *data_pack);
+ uint8_t  check_key_password();
 enum DemoInternalStates
 {
     APP_RNG = 0, // nothing to do (or wait a radio interrupt)
@@ -86,7 +89,7 @@ void rang_runing()
 		 case 0 :
 			       SX127X_StandbyMode();   //待机模式   
 		           	lora_data_state=1;
-		     	pack_len=pin_pack(dev_num,0x01,0x12,&lora_data_state); //发送入网请求
+		     	pack_len=pin_pack(dev_num,0x01,0x12,&lora_data_state); //
 			    printf("pack_len=%d\r\n",pack_len);
 			    set_txrx_datalen(pack_len);//数据包长度
            SX127X_TxPacket(TXbuffer); 
@@ -95,15 +98,16 @@ void rang_runing()
 		                 break;
 		 case 1 :    
 		       	          printf("一键启动报警\r\n");					
-					              Line_1A_WT588S(7);//报警成功	
+					              Line_1A_WT588S(7);//
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 		                      rang_state=2;
 		                 break;
 		 case  2 :    
-		 
+		                   HAL_GPIO_TogglePin( led_en_GPIO_Port,led_en_Pin);
                        Line_1A_WT588S(4);//			      
-				               HAL_Delay(1000);  //延迟播放音乐
+				               HAL_Delay(500);  //延迟播放音乐
+		
     			  
 		        break;			      
 	 }	
@@ -125,9 +129,10 @@ void fangchai_runing()
 		                 break;
 		 case 1 :    
 		               printf("防拆声音\r\n");
-					            Line_1A_WT588S(0);//报警成功				      
-				               HAL_Delay(1000);  //延迟播放音乐
-										   HAL_Delay(1000);
+		                   HAL_GPIO_TogglePin( led_en_GPIO_Port,led_en_Pin);      
+					            Line_1A_WT588S(4);//报警成功				      
+				               HAL_Delay(500);  //延迟播放音乐
+//										   HAL_Delay(1000);
 //		                if(play_music_com(0)==1)
 //											 {
 ////		                 fagchai_state=2;
@@ -153,10 +158,43 @@ void check_rung_state()
 				  if(fangchai_flag==1)
 					{
 						  fangchai_runing();
-				
-						
+									
 					}
-	
+					//检查按键输入是否正确
+	      if(password_key_value!=0)
+				{
+					if(password_key_value==1)
+					{
+						password_key_value=0;
+						printf("12345");
+						HAL_NVIC_SystemReset();
+						  rang_key_flag=0;   						
+					}
+					//密码消警
+					if(password_key_value==2)
+					{
+						password_key_value=0;
+						printf("8888");
+							    SX127X_StandbyMode();   //待机模式   	
+                      lora_data_state=1;								 
+			    pack_len=pin_pack(dev_num,0x01,0x13,&lora_data_state); 
+			       set_txrx_datalen(pack_len);//数据包长度
+                 SX127X_TxPacket(TXbuffer);  
+								       Line_1A_WT588S(15);//消警成功	
+								 HAL_GPIO_WritePin(led_en_GPIO_Port, led_en_Pin, GPIO_PIN_SET); 
+								 
+				               HAL_Delay(1000);  //延迟播放音乐
+//										   HAL_Delay(1000);
+									          rang_key_flag=0;
+								             rang_state=0;
+					         	 rang_key_flag=0;  
+                     fangchai_flag=0; 	
+						
+							           	 sleep_open();
+						 
+  						
+					}
+				}
 }
 	
 void lora_process()
@@ -223,7 +261,7 @@ void lora_process()
 								         
 								       //后台接收防拆报警指令
 								 case  0x04 : 
-									           
+									         HAL_GPIO_WritePin(led_en_GPIO_Port, led_en_Pin, GPIO_PIN_SET);    
 //								   printf("后台收到防拆指令报警\r\n");
 							            fangchai_flag=0;
 								 fagchai_state=0;
@@ -242,11 +280,13 @@ void lora_process()
 			       set_txrx_datalen(pack_len);//数据包长度
                  SX127X_TxPacket(TXbuffer);  
 								       Line_1A_WT588S(15);//消警成功	
-
+								 HAL_GPIO_WritePin(led_en_GPIO_Port, led_en_Pin, GPIO_PIN_SET); 
+								 
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 									          rang_key_flag=0;
 								             rang_state=0;
+								           password_key=0;
 							           	 sleep_open();
 								 break;
 								 //后台设置消警密码
@@ -445,7 +485,7 @@ uint8_t key_password_set(uint8_t *password)
 			{
 				case 1:
 				   
-    			     	Line_1A_WT588S(1);
+    			       	Line_1A_WT588S(1);
 				            key_count++;
 				            key_value=1;
 				 
@@ -470,10 +510,10 @@ uint8_t key_password_set(uint8_t *password)
 	
 //	  
 //	     EEPROM_ReadBytes(userpass, 10, 6);
-				for(uint8_t i=0;i<6;i++)
-				{
-      printf("%d",password[i]);
-				}
+//				for(uint8_t i=0;i<6;i++)
+//				{
+//      printf("%d",password[i]);
+//				}
 				value=1;
 				  key_count=0;
 				  key_value=0;
@@ -482,55 +522,72 @@ uint8_t key_password_set(uint8_t *password)
 			 } 
 return value ;			
  }
-
- void check_key_password()
- {
-	           scan_key_flag=1;
+//校验密码
+ uint8_t  check_key_password()
+  {
+	              uint8_t  value=0;
+//	           scan_key_flag=1;
 					if(key_password_set(user_temp_password)==1)
 					  {
-							scan_key_flag=0;
-							     HAL_Delay(10); //播放语音
+//							  scan_key_flag=0;
+							     HAL_Delay(500); //播放语音
 						      				 uint8_t b=0;
-					  printf("check_password_num\r\n");
-				            for(uint8_t i=0;i<6;i++)
-				       { 
-							    printf("user_temp_password[%d]=%d",i,user_temp_password[i]);
-							 }
-							       for(uint8_t i=0;i<6;i++)
-				       { 
-							    printf("user_password[%d]=%d",i,user_password[i]);
-							 }
+							             uint8_t b1=0;
+
 				         for(uint8_t i=0;i<6;i++)
 				       {
 					          if(user_temp_password[i]==user_password[i])
 										{
 											        b++ ;
+										}				       
+		           }
+							  for(uint8_t i=0;i<6;i++)
+				       {
+					          if(user_temp_password[i]==xiaojing_password[i])
+										{
+											        b1++ ;
 										}
-					       
-		           	}
-				printf("b=%d",b);
-				      if(b==6)
+		           }
+//				printf("b=%d",b);
+//									printf("b1=%d",b1);	
+				      if((b==6)||(b1==6))
 					    {				
-                    //输入启动密码正确								
-
-								  	Line_1A_WT588S(14);//密码正确
+                    //撤防成功						
+                if(b==6)
+								{
+										Line_1A_WT588S(14);//密码正确
 				               HAL_Delay(1000);
-										   HAL_Delay(1000);	
+//										   HAL_Delay(1000);	
 									  	b=0;
+							     	value=1;
+								}
+								//消警成功
+								 else if(b1==6)
+								 {
+									 printf("xiaojingcheng");
+									 	Line_1A_WT588S(14);//密码正确
+				               HAL_Delay(1000);
+//										   HAL_Delay(1000);	
+									  	b1=0;
+							     	value=2;
+									 
+								 }
 					      
 				      }
-			       else
-			      {
+			        else
+			       {
 
 									   Line_1A_WT588S(13);//密码错误
 				               HAL_Delay(1000);
-										   HAL_Delay(1000);	
-									  	b=0;		
+//										   HAL_Delay(1000);	
+									  	b=0;
+                      b1=0;	
+                     value=0;							 
 			        }
 						
 						
 					  }
-	 
+	  return  value;
  }
 //出厂设置
 uint8_t  factory_parameter_set()

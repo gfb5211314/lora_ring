@@ -37,9 +37,9 @@ l051lorarang\main.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_tim_ex.h
 l051lorarang\main.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h
 l051lorarang\main.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h
 l051lorarang\main.o: ../Inc/adc.h
-l051lorarang\main.o: ../Inc/usart.h
 l051lorarang\main.o: ../Inc/rtc.h
 l051lorarang\main.o: ../Inc/spi.h
+l051lorarang\main.o: ../Inc/usart.h
 l051lorarang\main.o: ../Inc/gpio.h
 l051lorarang\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 l051lorarang\main.o: ../Src/main_app.h
