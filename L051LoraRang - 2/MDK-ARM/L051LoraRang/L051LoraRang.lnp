@@ -39,6 +39,8 @@
 "l051lorarang\key_hal.o"
 "l051lorarang\bsp_eeprom.o"
 "l051lorarang\speak_hal.o"
+"l051lorarang\adc_bat.o"
+"l051lorarang\sm4.o"
 --library_type=microlib --strict --scatter "L051LoraRang\L051LoraRang.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

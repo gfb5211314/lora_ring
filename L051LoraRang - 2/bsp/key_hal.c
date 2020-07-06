@@ -16,6 +16,7 @@
 #define   FANGCHAI_key_Port    FANGCHAI_GPIO_Port
 #define   fangchai_key_pin       FANGCHAI_Pin
 uint8_t key_state_value=0;
+uint8_t init_key_flag=0;
  extern uint8_t  scan_key_flag;
   extern uint8_t  runing_state_flag;
 	  extern uint8_t  rang_key_flag;
@@ -74,7 +75,7 @@ uint8_t  scan_key()
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
    
-      HAL_Delay(10);/* 延时一小段时间，消除抖动 */
+     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
 	if((scan_key_flag==1)||(runing_state_flag==1))
 	{
      if(GPIO_Pin==key1_Pin)
@@ -108,7 +109,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(key3_GPIO_Port,key3_Pin)==0)
     {
-//						   printf("3");
         password_key=1;
           key_state_value=3;
 	
@@ -116,7 +116,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
     __HAL_GPIO_EXTI_CLEAR_IT(key3_Pin);
   }
-    if((password_key==1)&&(runing_state_flag==1))
+    if((password_key==1)&&(runing_state_flag==1)&&((rang_key_flag==1)||(fangchai_flag==1)))
 			{
 				        password_key_value =check_key_password();
            if(password_key_value!=0)
@@ -130,6 +130,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 						 key_state_value=0;
 					 }
 			}
+			else
+			{
+				
+				password_key_value=0;
+			}
 
   }
 		 if(GPIO_Pin==rang_key_Pin)
@@ -139,9 +144,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {    		
 			if(runing_state_flag==1)
 			{
-	
          rang_key_flag=1;
-				  printf("156");
+				key_state_value=0;
 			}
 			else
 			{
@@ -157,13 +161,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {
            	if(runing_state_flag==1)
 			{
-
             fangchai_flag=1;
-				   
+				   key_state_value=0;
 			}
 			else
 			{
-				fangchai_flag=0;
+			  	fangchai_flag=0;
 			}
     }
     __HAL_GPIO_EXTI_CLEAR_IT(fangchai_key_pin);
@@ -171,7 +174,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
 	 if((sleep_flag==1)&&(runing_state_flag==1))
 		{
+			key_state_value=0;
 			      sleep_init();
+		     	sleep_flag=0;
+//		     	init_key_flag=1;
 //			printf("醒来\r\n");
 		}
 

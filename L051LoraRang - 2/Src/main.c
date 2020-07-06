@@ -56,15 +56,42 @@ static void MX_NVIC_Init(void);
 		
     __HAL_RCC_GPIOA_CLK_ENABLE(); 	
 		
-	  GPIO_InitStruct.Pin = FANGCHAI_Pin  |key1_Pin|key2_Pin|key3_Pin |rang_key_Pin;
+	  GPIO_InitStruct.Pin = FANGCHAI_Pin |rang_key_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		
  // 	__HAL_RCC_GPIOA_CLK_DISABLE();
-//	     MX_RTC_Init();
+	     MX_RTC_Init();
 			  MX_NVIC_Init();
 
 }	
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+extern uint8_t sleep_flag;
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
+/* USER CODE BEGIN PFP */
+// void bsp_init_main_key() 
+//{
+//	  GPIO_InitTypeDef GPIO_InitStruct = {0};
+//		
+//    __HAL_RCC_GPIOA_CLK_ENABLE(); 	
+//		
+//	  GPIO_InitStruct.Pin = FANGCHAI_Pin |rang_key_Pin;
+//    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+//    GPIO_InitStruct.Pull = GPIO_PULLUP;
+//    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		
+// // 	__HAL_RCC_GPIOA_CLK_DISABLE();
+////	     MX_RTC_Init();
+//			  MX_NVIC_Init();
+
+//}	
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -187,6 +214,10 @@ void stop_mode_config(void)
 {
  GPIO_InitTypeDef GPIO_InitStruct;
 	
+	
+	              __HAL_RTC_WAKEUPTIMER_EXTI_CLEAR_FLAG();    //clear flag
+                __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);                //clear Power wakeup flag
+	
   __HAL_RCC_PWR_CLK_ENABLE();
   HAL_PWREx_EnableUltraLowPower();
   HAL_PWREx_EnableFastWakeUp();
@@ -224,7 +255,11 @@ void stop_mode_config(void)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
 
-
+    GPIO_InitStruct.Pin = key2_Pin|key3_Pin|key1_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	
 ////////  /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = speak_busy_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -281,7 +316,7 @@ void sleep_init()
 
   /* USER CODE BEGIN SysInit */
       HAL_UART_DeInit(&huart1);
-//	     HAL_ADC_DeInit(&hadc);
+	     HAL_ADC_DeInit(&hadc);
 	     HAL_SPI_DeInit(&hspi1);
 		HAL_GPIO_DeInit(GPIOB, GPIO_PIN_15);
   /* USER CODE END SysInit */
@@ -290,13 +325,20 @@ void sleep_init()
   MX_ADC_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
-//  MX_RTC_Init();
+  MX_RTC_Init();
 
 //  /* Initialize interrupts */
    MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 	app_lora_config_init();
 }
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+
 /* USER CODE END 0 */
 
 
@@ -336,11 +378,12 @@ int main(void)
   MX_ADC_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
-//  MX_RTC_Init();
+  MX_RTC_Init();
 
 //  /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
+
 		app_lora_config_init();
 		while(factory_parameter_set()!=1)
 	{
@@ -357,9 +400,10 @@ int main(void)
 		 sleep_open();
   while (1)
   {
+		
 		 lora_process();
 		check_rung_state();
-		
+		check_vol_task();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -430,6 +474,9 @@ static void MX_NVIC_Init(void)
   /* EXTI4_15_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
+  /* ADC1_COMP_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(ADC1_COMP_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(ADC1_COMP_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -452,26 +499,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM2) {
     HAL_IncTick();
   }
-	   
-//printf("password_key=%d",password_key);
-//	printf("runing_state_flag=%d",runing_state_flag);
   /* USER CODE BEGIN Callback 1 */
-	if((password_key==1)&&(sleep_flag==1))
-	{
-	    tim_count++;
-	    if(tim_count>300000)
-			{
-				password_key=0;
-				tim_count=0;
-				sleep_open();
-		  }
-		}
-	else
-	{
-		password_key=0;
-		tim_count=0;
-		
-	}
+//	if((password_key==1)&&(sleep_flag==1))
+//	{
+//	    tim_count++;
+//	    if(tim_count>2000)
+//			{
+//				tim_count=0;
+//			HAL_ADC_Start_IT(&hadc);
+//		  }
+//		}
+//	else
+//	{
+//		password_key=0;
+//		tim_count=0;
+//		
+//	}
   /* USER CODE END Callback 1 */
 }
 

@@ -54,10 +54,8 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, lora_rst_Pin|wr_24cxx_Pin|speak_data_Pin|BELL_EN_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, clk_24cxx_Pin|sda_24cxx_Pin|led_en_Pin|rang_led_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, lora_rst_Pin|wr_24cxx_Pin|clk_24cxx_Pin|sda_24cxx_Pin 
+                          |led_en_Pin|speak_data_Pin|BELL_EN_Pin|rang_led_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LORA_DIO0_Pin;

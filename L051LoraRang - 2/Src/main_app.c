@@ -35,6 +35,8 @@ uint8_t lora_data_state=0;
 uint8_t scan_key_flag=0;
 uint8_t password_key=0;  //按键检查标志
 uint8_t sleep_flag=0;
+extern uint8_t vol_conv_flag;
+extern uint8_t adc_temp;
 extern uint8_t password_key_value;
 void set_txrx_datalen(uint8_t datalen);
 void sleep_open(void);
@@ -81,6 +83,26 @@ void app_lora_config_init()
  uint8_t flag=0;
  uint8_t rang_state=0;
  uint8_t fagchai_state=0;
+//检测电池电压
+void check_vol_task()
+{
+	    if(vol_conv_flag==1)
+			{
+			        SX127X_StandbyMode();   //待机模式   
+		           
+		     	pack_len=pin_pack(dev_num,0x01,0x03,&adc_temp); //
+			    printf("pack_len=%d\r\n",pack_len);
+			    set_txrx_datalen(pack_len);//数据包长度
+           SX127X_TxPacket(TXbuffer); 
+				   vol_conv_flag=0;
+				   HAL_Delay(1000);
+			  	  HAL_Delay(1000);
+				   sleep_open(); 
+				
+			}
+	
+	
+}
 void rang_runing()
 {
 	  printf("rang_state=%d",rang_state);
@@ -98,14 +120,15 @@ void rang_runing()
 		                 break;
 		 case 1 :    
 		       	          printf("一键启动报警\r\n");					
-					              Line_1A_WT588S(7);//
+					              Line_1A_WT588S(10);//
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 		                      rang_state=2;
 		                 break;
 		 case  2 :    
+				
 		                   HAL_GPIO_TogglePin( led_en_GPIO_Port,led_en_Pin);
-                       Line_1A_WT588S(4);//			      
+                       Line_1A_WT588S(16);//			      
 				               HAL_Delay(500);  //延迟播放音乐
 		
     			  
@@ -119,7 +142,7 @@ void fangchai_runing()
 	 {
 		 case 0 :
 			         printf("防拆启动报警\r\n");
-					            Line_1A_WT588S(9);//报警成功
+					            Line_1A_WT588S(12);//报警成功
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 //		                   if(play_music_com(9)==1)
@@ -130,7 +153,7 @@ void fangchai_runing()
 		 case 1 :    
 		               printf("防拆声音\r\n");
 		                   HAL_GPIO_TogglePin( led_en_GPIO_Port,led_en_Pin);      
-					            Line_1A_WT588S(4);//报警成功				      
+					            Line_1A_WT588S(16);//报警成功				      
 				               HAL_Delay(500);  //延迟播放音乐
 //										   HAL_Delay(1000);
 //		                if(play_music_com(0)==1)
@@ -165,6 +188,8 @@ void check_rung_state()
 				{
 					if(password_key_value==1)
 					{
+						    Line_1A_WT588S(13);//
+						  HAL_Delay(1000);  //延迟播放音乐
 						password_key_value=0;
 						printf("12345");
 						HAL_NVIC_SystemReset();
@@ -180,7 +205,7 @@ void check_rung_state()
 			    pack_len=pin_pack(dev_num,0x01,0x13,&lora_data_state); 
 			       set_txrx_datalen(pack_len);//数据包长度
                  SX127X_TxPacket(TXbuffer);  
-								       Line_1A_WT588S(15);//消警成功	
+								       Line_1A_WT588S(11);//消警成功	
 								 HAL_GPIO_WritePin(led_en_GPIO_Port, led_en_Pin, GPIO_PIN_SET); 
 								 
 				               HAL_Delay(1000);  //延迟播放音乐
@@ -279,7 +304,7 @@ void lora_process()
 			    pack_len=pin_pack(dev_num,0x01,0x13,&lora_data_state); 
 			       set_txrx_datalen(pack_len);//数据包长度
                  SX127X_TxPacket(TXbuffer);  
-								       Line_1A_WT588S(15);//消警成功	
+								       Line_1A_WT588S(11);//消警成功	
 								 HAL_GPIO_WritePin(led_en_GPIO_Port, led_en_Pin, GPIO_PIN_SET); 
 								 
 				               HAL_Delay(1000);  //延迟播放音乐
@@ -491,12 +516,12 @@ uint8_t key_password_set(uint8_t *password)
 				 
 				break;
 				case 2:     
-					          key_count++;Line_1A_WT588S(2);
+					          key_count++;Line_1A_WT588S(1);
                         key_value=2;
 				break;
 				case 3: 
 				                	key_value=3;
-					         key_count++;Line_1A_WT588S(3);
+					         key_count++;Line_1A_WT588S(1);
 				break;
 			}
 			if(key_count<7)
@@ -555,7 +580,7 @@ return value ;
                     //撤防成功						
                 if(b==6)
 								{
-										Line_1A_WT588S(14);//密码正确
+										Line_1A_WT588S(9);//密码正确
 				               HAL_Delay(1000);
 //										   HAL_Delay(1000);	
 									  	b=0;
@@ -565,7 +590,7 @@ return value ;
 								 else if(b1==6)
 								 {
 									 printf("xiaojingcheng");
-									 	Line_1A_WT588S(14);//密码正确
+									 	Line_1A_WT588S(9);//密码正确
 				               HAL_Delay(1000);
 //										   HAL_Delay(1000);	
 									  	b1=0;
@@ -577,8 +602,9 @@ return value ;
 			        else
 			       {
 
-									   Line_1A_WT588S(13);//密码错误
+									   Line_1A_WT588S(8);//密码错误
 				               HAL_Delay(1000);
+							        HAL_Delay(1000);
 //										   HAL_Delay(1000);	
 									  	b=0;
                       b1=0;	
@@ -618,7 +644,7 @@ uint8_t  factory_parameter_set()
 			break;
 						//播放用户密码音乐
 			case 2 : 
-				              Line_1A_WT588S(9);//播放设定密码声音
+				              Line_1A_WT588S(2);//播放设定密码声音
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 		              	key_state_value=0;
@@ -638,7 +664,7 @@ uint8_t  factory_parameter_set()
 							
 						          	HAL_Delay(1000);										
 							 	EEPROM_WriteBytes(user_password, 10,6);  //把用户密码写进去
-							        	Line_1A_WT588S(19);//播放设定密码声音
+							        	Line_1A_WT588S(3);//播放设定密码声音
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);					
 							          factory_num=4;	
@@ -646,7 +672,7 @@ uint8_t  factory_parameter_set()
 				 break;
 						//播放设置消警密码
 			case 4 :
-				              	Line_1A_WT588S(8);//播放设定密码声音
+				              	Line_1A_WT588S(4);//播放设定密码声音
 				               HAL_Delay(1000);  //延迟播放音乐
 										   HAL_Delay(1000);
 			               	 factory_num=5;	
@@ -660,7 +686,7 @@ uint8_t  factory_parameter_set()
 							    scan_key_flag=0;
 							     HAL_Delay(1000);
 							  	EEPROM_WriteBytes(xiaojing_password, 20,6);  //把用户密码写进去
-							        	Line_1A_WT588S(17);//播放设定密码声音
+							        	Line_1A_WT588S(5);//播放设定密码声音
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);					
 							      factory_num=6;	
@@ -712,7 +738,7 @@ uint8_t  factory_parameter_set()
 									break;
 				//出厂完成
 			case 12 :
-				      Line_1A_WT588S(10);//
+				      Line_1A_WT588S(7);//
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);	 
 				  printf("出厂设置完成\r\n");
@@ -789,7 +815,7 @@ uint8_t  factory_parameter_set()
 					    {				
                     //输入启动密码正确								
 
-								  	Line_1A_WT588S(14);//密码正确
+								  	Line_1A_WT588S(9);//密码正确
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);	
 									  	b=0;
@@ -798,7 +824,7 @@ uint8_t  factory_parameter_set()
 			       else
 			      {
 
-									   Line_1A_WT588S(13);//密码错误
+									   Line_1A_WT588S(8);//密码错误
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);	
 									  	b=0;		
@@ -812,7 +838,7 @@ uint8_t  factory_parameter_set()
 				case  18: 
 					//播放语音:设备开始工作 ,绿灯亮起来
 
-                  Line_1A_WT588S(12);//设备开始工作
+                  Line_1A_WT588S(14);//设备开始工作
 				               HAL_Delay(1000);
 										   HAL_Delay(1000);	  
           			  runing_state_flag=1;	
