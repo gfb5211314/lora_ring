@@ -1,6 +1,6 @@
 Dependencies for Project 'L051LoraRang', Target 'L051LoraRang': (DO NOT MODIFY !)
 F (startup_stm32l051xx.s)(0x5EF81206)(--cpu Cortex-M0+ -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include--pd "__UVISION_VERSION SETA 527" --pd "_RTE_ SETA 1" --pd "STM32L051xx SETA 1"--list startup_stm32l051xx.lst --xref -o l051lorarang\startup_stm32l051xx.o --depend l051lorarang\startup_stm32l051xx.d)
-F (..\Src\main_app.c)(0x5EF85D99)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\main_app.o --omf_browse l051lorarang\main_app.crf --depend l051lorarang\main_app.d)
+F (..\Src\main_app.c)(0x5F56DBAC)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\main_app.o --omf_browse l051lorarang\main_app.crf --depend l051lorarang\main_app.d)
 I (..\Src\main_app.h)(0x5ED86DDB)
 I (../Inc/main.h)(0x5EF81201)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5E68AD5D)
@@ -47,7 +47,7 @@ I (D:\keil\ARM\ARMCC\include\string.h)(0x599ECD2C)
 I (..\bsp\key_hal.h)(0x5ECF36E8)
 I (..\bsp\speak_hal.h)(0x5ED859EA)
 I (../Inc/GPIO.h)(0x5EF811FE)
-F (../Src/main.c)(0x5EF860C1)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\main.o --omf_browse l051lorarang\main.crf --depend l051lorarang\main.d)
+F (../Src/main.c)(0x5F55F0D5)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\main.o --omf_browse l051lorarang\main.crf --depend l051lorarang\main.d)
 I (../Inc/main.h)(0x5EF81201)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5E68AD5D)
 I (../Inc/stm32l0xx_hal_conf.h)(0x5EF81201)
@@ -94,7 +94,7 @@ I (../Src/main_app.h)(0x5ED86DDB)
 I (..\bsp\SX127X_Driver.h)(0x5EC37BAA)
 I (..\bsp\SX127X_Hal.h)(0x5EB8BF04)
 I (D:\keil\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
-F (../Src/gpio.c)(0x5EF811FE)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\gpio.o --omf_browse l051lorarang\gpio.crf --depend l051lorarang\gpio.d)
+F (../Src/gpio.c)(0x5F55F0DC)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\gpio.o --omf_browse l051lorarang\gpio.crf --depend l051lorarang\gpio.d)
 I (../Inc/gpio.h)(0x5EF811FE)
 I (../Inc/main.h)(0x5EF81201)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5E68AD5D)
@@ -284,7 +284,7 @@ I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_tim.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_tim_ex.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h)(0x5E68AD5D)
-F (../Src/stm32l0xx_it.c)(0x5EF84AEB)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\stm32l0xx_it.o --omf_browse l051lorarang\stm32l0xx_it.crf --depend l051lorarang\stm32l0xx_it.d)
+F (../Src/stm32l0xx_it.c)(0x5F505132)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\stm32l0xx_it.o --omf_browse l051lorarang\stm32l0xx_it.crf --depend l051lorarang\stm32l0xx_it.d)
 I (../Inc/main.h)(0x5EF81201)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5E68AD5D)
 I (../Inc/stm32l0xx_hal_conf.h)(0x5EF81201)
@@ -1342,7 +1342,7 @@ I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_tim_ex.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h)(0x5E68AD5D)
 I (../Inc/main.h)(0x5EF81201)
-F (..\bsp\key_hal.c)(0x5EF8529B)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\key_hal.o --omf_browse l051lorarang\key_hal.crf --depend l051lorarang\key_hal.d)
+F (..\bsp\key_hal.c)(0x5F55F0F9)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\key_hal.o --omf_browse l051lorarang\key_hal.crf --depend l051lorarang\key_hal.d)
 I (..\bsp\key_hal.h)(0x5ECF36E8)
 I (../Inc/main.h)(0x5EF81201)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5E68AD5D)
@@ -1497,7 +1497,11 @@ I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h)(0x5E68AD5D)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h)(0x5E68AD5D)
 I (../Inc/adc.h)(0x5EF811FF)
 I (../Inc/rtc.h)(0x5EF811FF)
-F (..\bsp\sm4.c)(0x5EFAD8E5)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\sm4.o --omf_browse l051lorarang\sm4.crf --depend l051lorarang\sm4.d)
+F (..\bsp\sm4.c)(0x4F922309)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\sm4.o --omf_browse l051lorarang\sm4.crf --depend l051lorarang\sm4.d)
 I (..\bsp\sm4.h)(0x4F921C07)
 I (D:\keil\ARM\ARMCC\include\string.h)(0x599ECD2C)
 I (D:\keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+F (..\bsp\sm4_app.c)(0x5F0BC82F)(--c99 -c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I ../Drivers/CMSIS/Include -I ..\bsp-I.\RTE\_L051LoraRang-ID:\keil\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\keil\Keil\STM32L0xx_DFP\2.0.1\Drivers\CMSIS\Device\ST\STM32L0xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32L051xx -DUSE_HAL_DRIVER -DSTM32L051xx-o l051lorarang\sm4_app.o --omf_browse l051lorarang\sm4_app.crf --depend l051lorarang\sm4_app.d)
+I (D:\keil\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (..\bsp\sm4.h)(0x4F921C07)

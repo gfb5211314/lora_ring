@@ -612,6 +612,11 @@
               <FileType>1</FileType>
               <FilePath>..\bsp\sm4.c</FilePath>
             </File>
+            <File>
+              <FileName>sm4_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\sm4_app.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

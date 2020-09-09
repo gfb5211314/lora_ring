@@ -25,6 +25,8 @@ uint8_t init_key_flag=0;
   extern		uint8_t password_key;  //按键检查标志
 	extern uint8_t password_key_value;
 				uint8_t xingling_flag=0;
+		uint8_t  reset_rang_flag=0;
+		uint8_t  reset_rang_key=0;
 //HAL接口层函数
 //获得key1键值
 uint8_t get_key1()
@@ -84,13 +86,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(key1_GPIO_Port,key1_Pin)==0)
     {
-//			    printf("1");
+			    printf("1");
 	        password_key=1;
           key_state_value=1;
 	
 		  
     }
-    __HAL_GPIO_EXTI_CLEAR_IT(key1_Pin);
+
     }
   else if(GPIO_Pin==key2_Pin)
   {
@@ -135,13 +137,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				
 				password_key_value=0;
 			}
-
+    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
   }
 		 if(GPIO_Pin==rang_key_Pin)
   {
     HAL_Delay(10);/* 延时一小段时间，消除抖动 */
     if(HAL_GPIO_ReadPin(rang_key_GPIO_Port,rang_key_Pin)==0)
-    {    		
+    {
+			//初始化功能按键，8.31增加代码
+      if(reset_rang_flag==0)
+			{
+         reset_rang_key=1;
+			}	
+//			
 			if(runing_state_flag==1)
 			{
          rang_key_flag=1;

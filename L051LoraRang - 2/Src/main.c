@@ -56,9 +56,15 @@ static void MX_NVIC_Init(void);
 		
     __HAL_RCC_GPIOA_CLK_ENABLE(); 	
 		
-	  GPIO_InitStruct.Pin = FANGCHAI_Pin |rang_key_Pin;
+	  GPIO_InitStruct.Pin = rang_key_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		
+		
+		
+			  GPIO_InitStruct.Pin = FANGCHAI_Pin ;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		
  // 	__HAL_RCC_GPIOA_CLK_DISABLE();
 	     MX_RTC_Init();
@@ -124,6 +130,7 @@ static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PV */
 extern uint8_t sleep_flag;
+extern uint8_t reset_rang_key;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -245,7 +252,7 @@ void stop_mode_config(void)
   GPIO_InitStruct.Pin = lora_rst_Pin|LORA_DIO0_Pin|wr_24cxx_Pin|clk_24cxx_Pin 
                           |sda_24cxx_Pin|rang_led_Pin|speak_data_Pin|BELL_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 
@@ -261,10 +268,10 @@ void stop_mode_config(void)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
 ////////  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = speak_busy_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(speak_busy_GPIO_Port, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = speak_busy_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(speak_busy_GPIO_Port, &GPIO_InitStruct);
 	
 
 				
@@ -299,11 +306,11 @@ void sleep_open()
 void sleep_init()
 {
     /* USER CODE BEGIN SysInit */
-//	   HAL_UART_DeInit(&huart1);
-//	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_All);
+	   HAL_UART_DeInit(&huart1);
+	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_All);
 
-//	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_All);
-//  HAL_GPIO_DeInit(GPIOH, GPIO_PIN_All);
+	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_All);
+  HAL_GPIO_DeInit(GPIOH, GPIO_PIN_All);
  
 //       HAL_UART_DeInit(&hlpuart1);
 	     HAL_Init();
@@ -318,7 +325,7 @@ void sleep_init()
       HAL_UART_DeInit(&huart1);
 	     HAL_ADC_DeInit(&hadc);
 	     HAL_SPI_DeInit(&hspi1);
-		HAL_GPIO_DeInit(GPIOB, GPIO_PIN_15);
+//		HAL_GPIO_DeInit(GPIOB, GPIO_PIN_15);
   /* USER CODE END SysInit */
   /* Initialize all configured peripherals */
   MX_GPIO_Init();	
@@ -387,8 +394,14 @@ int main(void)
 		app_lora_config_init();
 		while(factory_parameter_set()!=1)
 	{
+		  //复位按键重新设置,8月31号新加上去代码
+        if( reset_rang_key==1)
+				{
+						HAL_NVIC_SystemReset();
+					reset_rang_key=0;
+				}
 	}
-
+	   
 //  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
 
@@ -403,7 +416,7 @@ int main(void)
 		
 		 lora_process();
 		check_rung_state();
-		check_vol_task();
+		check_vol_task(); 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
